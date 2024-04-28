@@ -1,0 +1,1070 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+using namespace std;
+
+
+class person {
+	
+	int id[50];
+	int age[50];
+	string name[50];
+	string email[50];
+	string occupation[50]; 
+
+public:
+	
+	person() {
+		for (int i = 0; i < 50; i++) {
+			id[i] = 0;          
+			age[i] = 0;         
+			name[i] = "";       
+			email[i] = "";      
+			occupation[i] = ""; 
+		}
+	}
+
+	
+	void setid(int index, int a) {
+		if (index >= 0 && index < 50) {
+			id[index] = a;
+		}
+	}
+	void setname(int index, string n) {
+		if (index >= 0 && index < 50) {
+			name[index] = n;
+		}
+	}
+	void setage(int index, int a) {
+		if (index >= 0 && index < 50) {
+			age[index] = a;
+		}
+	}
+	void setemail(int index, string e) {
+		if (index >= 0 && index < 50) {
+			email[index] = e;
+		}
+	}
+	void setoccupation(int index, string o) {
+		if (index >= 0 && index < 50) {
+			occupation[index] = o;
+		}
+	}
+
+
+	int getage(int index) {
+		if (index >= 0 && index < 50) {
+			return age[index];
+		}
+		return -1; 
+	}
+	int getid(int index) {
+		if (index >= 0 && index < 50) {
+			return id[index];
+		}
+		return -1;
+	}
+	string getname(int index) {
+		if (index >= 0 && index < 50) {
+			return name[index];
+		}
+		return ""; 
+	}
+	string getemail(int index) {
+		if (index >= 0 && index < 50) {
+			return email[index];
+		}
+		return ""; 
+	}
+	string getoccupation(int index) {
+		if (index >= 0 && index < 50) {
+			return occupation[index];
+		}
+		return "";
+	}
+
+
+	~person() {}
+};
+class student : public person {
+	int student_id;
+	string name;
+	string email;
+	string phone_number;
+
+	
+	
+	int course_count;
+	int assignment_count;
+	int club_count;
+
+	
+	string file_path = "student_data.txt";
+	string course_file_path = "enrolled_courses.txt";
+	string assignment_file_path = "submitted_assignments.txt";
+	string club_file_path = "joined_clubs.txt";
+	string filepath_event = "Events.txt";
+public:
+	student() : person() {
+		
+		student_id = 0;
+		name = "";
+		email = "";
+		phone_number = "";
+
+		course_count = 0;
+		assignment_count = 0;
+		club_count = 0;
+	}
+	void save_data_to_file() {
+		ofstream file(file_path, ios::app);
+		if (file.is_open()) {
+			file << student_id << "," << name << "," << email << "," << phone_number << "\n";
+			file.close();
+		}
+		else {
+			cerr << "Unable to open file for writing." << endl;
+		}
+	
+    }
+	void set_student_id(int id) {
+		student_id = id;
+		
+	}
+
+	void set_name(const string& n) {
+		name = n;
+		
+	}
+
+	void set_email(const string& e) {
+		email = e;
+		
+	}
+
+	void set_phone_number(const string& phone) {
+		phone_number = phone;
+		
+	}
+
+	int get_student_id() {
+		return student_id;
+	}
+
+	string get_name() {
+		return name;
+	}
+
+	string get_email() {
+		return email;
+	}
+
+	string get_phone_number() {
+		return phone_number;
+	}
+	
+	void submitAssignment() {
+		
+		ofstream file("assignment_status.txt", ios::app);
+		cout << "\n\n<\tEnter Student id:\n";
+		string assignment_id;
+		int idd;
+		cin >> idd;
+		cout << "<\tEnter Assignment ID:\n";
+		cin >> assignment_id;
+		cout << "<\tSubmit Assignment! \n";
+		if (file.is_open()) {
+			file << idd << " | " << assignment_id << "  ,yes\n";
+			file.close();
+			cout << "Assignment submitted successfully." << endl;
+		}
+		else {
+			cerr << "Unable to open file for writing." << endl;
+		}
+	}
+
+	// Method to save student club participation
+	void join_club() {
+		string cname;
+		string role;
+		string roll;
+		cout << "\n\n<\tEnter Your name:\n";
+		cin.ignore();
+		getline(cin, name);
+		cout << "<\tEnter roll:\n";
+		cin >> roll;
+		cout << "<\tEnter Club Name:\n";
+		cin.ignore();
+		getline(cin, cname);
+
+		cout << "<\tEnter A Group Role :\n";
+		cin.ignore();
+		getline(cin, role);
+
+		cout << "<\t\tCLUB JOINED !!!\t\t>\n<\t\t-----\t\t>";
+
+			
+			ofstream file(club_file_path, ios::app);
+			if (file.is_open()) {
+				file << name << "  ,  " <<roll <<"  ,  "<<cname<<"  ,  "<<role << endl;
+				file.close();
+			}
+			else {
+				cout << "Unable to open file for writing." << endl;
+			}
+			cout << "\n<\t\t----------\t\t>\n";
+	}
+	void enroll_student() {
+		string a,e,p;
+		int b;
+
+		cout << "\n\n<\tEntering the data of the students :\nEnter Name";
+		cin >> name;
+		
+		cout << "<\tEnter ID/Roll No. :\n";
+		cin >> student_id;
+	
+		cout << "<\tEnter email: \n";
+		cin >> email;
+		
+		cout << "<\tEnter Phone NO. :\n";
+		cin >> phone_number;
+		save_data_to_file();
+	}
+	void display_student_content() {
+		
+		ifstream file(file_path);
+		
+		string line;
+		cout << "File contents:" << endl;
+		while (getline(file, line)) {
+			cout << line << endl;
+		}
+		file.close();
+	cout << "\n<\t\t-----\t\t>\n";
+	}
+};
+class Event {
+private:
+	int event_id; 
+	string title; 
+	string description; 
+	string date; 
+	string venue; 
+
+public:
+	
+	Event() {
+		event_id = NULL;
+		title = "";
+		description = " ";
+		date = "";
+		venue = "";
+	}
+
+	
+	int getEventId() const {
+		return event_id;
+	}
+
+	string getTitle() const {
+		return title;
+	}
+
+	string getDescription() const {
+		return description;
+	}
+
+	string getDate() const {
+		return date;
+	}
+
+	string getVenue() const {
+		return venue;
+	}
+
+	
+	void setEventId(int id) {
+		event_id = id;
+	}
+
+	void setTitle(const string& t) {
+		title = t;
+	}
+
+	void setDescription(const string& desc) {
+		description = desc;
+	}
+
+	void setDate(const string& d) {
+		date = d;
+	}
+
+	void setVenue(const string& v) {
+		venue = v;
+	}
+	
+};
+class Club:public Event {
+private:
+	string club_id; 
+	string name; 
+	string description; 
+	int roll;
+
+	student members[50]; 
+	Event events_organized[50]; 
+
+	int member_count; 
+	int event_count; 
+
+public:
+	
+	Club() {
+		
+		club_id = "";
+		name = "";
+		description = "";
+		int roll;
+	}
+
+	// Method to add a member to the club
+	void add_member() {
+		
+		cout << "\n\n<\tEnter Roll no:\n";
+		cin >> roll;
+		cout << "<\tEnter the name of the member:\n";
+		
+		cin.ignore();
+		getline(cin, name);
+		cout << "<\tClub ID:\n";
+		cin >> club_id;
+		cout << "<\tEnter description:\n";
+		cin.ignore();
+		getline(cin, description);
+		cout << "<\tMEMBER ADDED TO THE CLUB!!!\n";
+		
+		ofstream file("joined_clubs.txt", ios::app);
+		
+			file << name << "  |  " << roll << "  |  " << club_id << "  |  " << description << endl;
+			file.close();
+		
+			cout << "\n<\t\t-----\t\t>\n";
+		
+	    
+	}
+
+	// Method to organize an event
+	void organize_event( ) {
+		Event e;
+	int event_id;
+	string title;
+	string description;
+	string date;
+	string venue;
+	cout << "\\n<______________________________________________\n";
+	cout << "PROVIDE INFORMATION TO ORGANIZE EVENT\n";
+		cout << "<\tEnter event name:\n";
+		cin >> title;
+		cout << "<\tEnter event id:\n";
+		cin >> event_id;
+		cout << "<\tEnter Date:\n";
+		cin >> date;
+		cout << "<\tVenue:\n";
+		cin >> venue;
+		cout << "<\tDescription:\n";
+		cin >> description;
+		e.setTitle(title);
+		e.setDate(date);
+		e.setDescription(description);
+		e.setEventId(event_id);
+		e.setVenue(venue);
+
+		ofstream file("Events.txt", ios::app);
+		file << title << "  |  " << event_id << "  |  " << date << "  |  " << venue << "  |  " << description << "  |  " << endl;
+		file.close();
+		cout << "\n<______________________________________________\n";
+		getEvent();
+	}
+
+	// Accessors (getters)
+	string getClubId() const {
+		return club_id;
+	}
+
+	string getName() const {
+		return name;
+	}
+
+	string getDescription() const {
+		return description;
+	}
+
+	int getMemberCount() const {
+		return member_count;
+	}
+
+	int getEventCount() const {
+		return event_count;
+	}
+
+	
+	student getMember() const {
+		cout << "\n<------------------------------------------------------------->\n";
+		cout << "THE FILE CONTENT OF THE  CLUB IS:\n";
+		cout << "NAME| ROLL |CLUB ID| DESCRIPTION\n";
+		cout << "----|-------|--------|----------\n";
+		ifstream file("joined_clubs.txt");
+		string line;
+		while (getline(file, line)) {
+			cout << line << endl;
+		}
+		file.close();
+	}
+
+	// Method to get an event by index
+	void getEvent() const {
+		cout << "\n<------------------------------------------------------------->\n";
+		cout << "THE FILE CONTENT OF THE  EVENT IS:\n";
+		cout << "TITLE  | ID | DATE | VENUE  | DESCRIPTION\n";
+		cout << "-------|-------|------------|----------\n";
+		ifstream file("Events.txt");
+		string line;
+		while (getline(file, line)) {
+			cout << line << endl;
+		}		
+		file.close();
+	}
+};
+
+
+
+
+////////////////////////////////////////////////////
+class Assignment {
+private:
+	string topic[50];
+	int assignment_id[50];
+	int course_id[50];
+	string due_date[50];
+	string description[50];
+
+
+public:
+
+	Assignment() {
+		for (int i = 0; i < 50; i++) {
+			assignment_id[i] = 0;
+			course_id[i] = 0;
+			due_date[i] = "";
+			description[i] = "";
+			topic[i] = " ";
+		}
+
+	}
+
+
+	int getAssignmentId(int index) const {
+		return assignment_id[index];
+	}
+
+	int getCourseId(int index) const {
+		return course_id[index];
+	}
+
+	string getDueDate(int index) const {
+		return due_date[index];
+	}
+
+	string getDescription(int index) const {
+		return description[index];
+	}
+
+
+	void setAssignmentId(int index, int a_id) {
+		assignment_id[index] = a_id;
+	}
+
+	void setCourseId(int index, int c_id) {
+		course_id[index] = c_id;
+	}
+
+	void setDueDate(int index, const string& d_date) {
+		due_date[index] = d_date;
+	}
+
+	void setDescription(int index, const string& desc) {
+		description[index] = desc;
+	}
+
+	
+	void saveToFile() {
+		ofstream file("submitted_assignments.txt", ios::app);
+		if (file.is_open()) {
+			for (int i = 0; i < 50; i++) {
+				file << topic[i] << "  |  " << assignment_id[i] << "  |   " << course_id[i] << "   |  " << due_date[i] << "  |  " << description[i] << "\n";
+			}
+			file.close();
+		}
+		else {
+			cerr << "Unable to open file for writing." << endl;
+		}
+	}
+	void showFileContent_Assignment() {
+		cout << "\n<\t\THE Data Of Assignmet is:\n";
+		cout << "TOPIC  |ASSIG.ID|COURSE.ID|DUE DATE| DESC.       \n";
+		cout << "-------|--------|---------|--------|-------------\n";
+		ifstream file("submitted_assignments.txt");
+		if (file.is_open()) {
+			
+			string line;
+			while (getline(file, line)) {
+				cout << line << endl;
+			}
+			
+			file.close();
+		}
+		else {
+			cerr << "Unable to open file for reading." << endl;
+		}
+		cout << "\n----------------------------------------------------------------------------------------------------------------------\n";
+	}
+};
+
+class Attendance {
+private:
+	int attendance_id[50];     
+	int student_id[50];        
+	int date[50];        
+	string attendance_status[50]; 
+
+	
+	student* student;
+
+public:
+	
+	Attendance() {
+		
+		for (int i = 0; i < 50; i++) {
+			attendance_id[i] = 0;
+			student_id[i] = 0;
+			date[i] = 0;
+			attendance_status[i] = "";
+			
+		}
+	}
+
+	
+	int getAttendanceId(int index) const {
+		return attendance_id[index];
+	}
+
+	int getStudentId(int index) const {
+		return student_id[index];
+	}
+
+	int getSessionId(int index) const {
+		return date[index];
+	}
+
+	string getAttendanceStatus(int index) const {
+		return attendance_status[index];
+	}
+
+	
+
+	
+	void setAttendanceId(int index, int att_id) {
+		attendance_id[index] = att_id;
+	}
+
+	void setStudentId(int index, int stud_id) {
+		student_id[index] = stud_id;
+	}
+
+	void setSessionId(int index, int sess_id) {
+		date[index] = sess_id;
+	}
+
+	void setAttendanceStatus(int index, const string& att_status) {
+		attendance_status[index] = att_status;
+	}
+
+	
+	
+	void markAttendance() {
+		
+		ofstream file("attendance.txt", ios::app);
+		if (!file.is_open()) {
+			cerr << "Unable to open file for writing." << endl;
+			return;
+		}
+
+		
+		int numStudents;
+		cout << "Enter the number of students to mark attendance for: ";
+		cin >> numStudents;
+
+		
+		for (int i = 0; i < numStudents; ++i) {
+			
+			int student_id;
+			cout << "Enter student ID: ";
+			cin >> student_id;
+
+			
+			string date;
+			cout << "Enter date: ";
+			cin >> date;
+
+			
+			string attendance_status;
+			cout << "Enter attendance status (e.g., Present, Absent): ";
+			cin.ignore(); 
+			getline(cin, attendance_status);
+
+		
+			string student_name;
+			cout << "Enter student name: ";
+			getline(cin, student_name);
+
+			
+			file << student_id << "," << student_name << "," << date << "," << attendance_status << "\n";
+
+			cout << "Attendance for student ID " << student_id << " has been marked and saved." << endl;
+		}
+
+	
+		file.close();
+
+		cout << "Attendance marking complete." << endl;
+
+	}
+	
+	void displayAttendance() const {
+		cout << "The attendance is given below:\n";
+		cout << "The attendance is given below:\n";
+		cout << "Student ID | Student Name | Date | Attendance Status" << endl;
+		cout << "-----------------------------------------------" << endl;
+
+		ifstream file("attendance.txt");
+		string line;
+		while (getline(file, line)) {
+			cout << line << endl;
+		}file.close();
+
+		
+	}
+};
+
+//////////////////////////////////
+class Course :public student,public Assignment {
+	// Course attributes
+	int id[50];
+	int course_id[50];
+	string name[50];
+	int credits[50];
+	string instructor[50];
+
+
+	student* enrolled_students[50];
+	//Assignment* assignments[50];   
+
+
+	int student_count;
+	int assignment_count;
+	string course_file_path = "enrolled_courses.txt";
+
+public:
+
+
+	Course() {
+
+		for (int i = 0; i < 50; i++) {
+			course_id[i] = 0;
+			name[i] = "";
+			credits[i] = 0;
+			instructor[i] = "";
+			enrolled_students[i] = nullptr;
+		}
+			student_count = 0;
+			assignment_count = 0;
+	}
+
+	void save_data_to_file(int index) {
+		ofstream file("enrolled_courses.txt", ios::app);
+		if (file.is_open()) {
+			 
+			file << id[index] << "  |  " << course_id[index] << "  |  " << name[index] << "  |  " << credits[index] << "  |  " << instructor[index] << "\n";
+			file.close();
+		}
+		else {
+			cerr << "Unable to open file for writing." << endl;
+		}
+	
+	}
+	void setid(int index, int a) {
+		id[index] = a;
+		save_data_to_file(index);
+	}
+
+	void setcourseid(int index, int a) {
+		course_id[index] = a;
+		save_data_to_file(index);
+	}
+
+	void setcredits(int index, int b) {
+		credits[index] = b;
+		save_data_to_file(index);
+	}
+
+	void setname(int index, string a) {
+		name[index] = a;
+		save_data_to_file(index);
+	}
+
+	void setinstructor(int index, string a) {
+		instructor[index] = a;
+		save_data_to_file(index);
+	}
+
+	
+	void add_student_course() {
+		string studentName, instructorName;
+		int studentID, courseID, creditHours;
+
+		
+		cout << "<Enter the student details for course enrollment:\n";
+
+		cout << "Enter student ID/roll no: ";
+		cin >> studentID;
+		id[student_count] = studentID;
+
+		cout << "Enter student name: ";
+		cin.ignore(); 
+		getline(cin, studentName);
+		name[student_count] = studentName;
+
+		cout << "Enter course ID: ";
+		cin >> courseID;
+		course_id[student_count] = courseID;
+
+		cout << "Enter credit hours: ";
+		cin >> creditHours;
+		credits[student_count] = creditHours;
+
+		cout << "Enter instructor name: ";
+		cin.ignore(); 
+		getline(cin, instructorName);
+		instructor[student_count] = instructorName;
+
+		
+		save_data_to_file(student_count);
+
+		
+		student_count++;
+	}
+
+	void show_course() {
+		
+		ifstream file("enrolled_courses.txt");
+		cout << "\n------------------------------------------------------------\n";
+		cout << "ENROLLED COURSES:\n";
+		cout << "Course ID | Name | Credits | Instructor | Enrolled Students\n";
+		cout << "------------------------------------------------------------\n";
+		string line;
+		while (getline(file, line)) {
+			cout << line << endl;
+		}
+		cout << "------------------------------------------------------------\n";
+		file.close();
+	}
+
+
+
+	int get_course_id(int index) const {
+		return course_id[index];
+	}
+
+	string get_name(int index) const {
+		return name[index];
+	}
+
+	int get_credits(int index) const {
+		return credits[index];
+	}
+
+	string get_instructor(int index) const {
+		return instructor[index];
+	}
+
+	void addAssignment() {
+		string topic, description, duedate, id,courseid;;
+		cout << "<\tEnter Assignment Topic:\n";
+		cin.ignore();
+		getline(cin, topic);
+		cout << "<\tEnter Assignment id:\n";
+		cin.ignore();
+		getline(cin, id);
+		cout << "<\tEnter Due Date:\n";
+		cin.ignore();
+		getline(cin, duedate);
+		cout << "<\tDescription:\n";
+		cin.ignore();
+		getline(cin, description);
+		cout << "<\tEnter Course ID:\n";
+		cin.ignore();
+		getline(cin,courseid);
+
+		ofstream file("submitted_assignments.txt", ios::app);
+		file << topic << "  |  " << id << "  |  " << courseid << "  |  " << duedate << "  |  " << description << "\n";
+		file.close();
+		
+	}
+
+
+
+	~Course() {
+		
+		for (int i = 0; i < student_count; i++) {
+			delete enrolled_students[i];
+		}
+
+		
+	}
+};
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	void adminlogin() {//*******************************************admin login signup
+
+		int count = 0, login = 0;
+		string username, password, userID, userPASS;
+		cout << "\n\n\n\nqq\t\t\t\t|    USERNAME:     ";
+		cin >> username;
+		cout << "\n\t\t\t\t|    PASSWORD:    ";
+		cin >> password;
+		ifstream input("SignInRecordsadmin.txt");
+		while (input >> userID >> userPASS) {
+			if (userID == username && userPASS == password) {
+				count = 1;
+			}
+		}if (count == 1) {
+		}
+		else {
+			cout << "INCORRECT CREDENTIALS !!\n";
+		}
+	}
+
+	void studentlogin()
+	{//*******************************************admin login signup
+
+		int count = 0, login = 0;
+		string username, password, userID, userPASS;
+		cout << "\n\n\n\nqq\t\t\t\t|    USERNAME:     ";
+		cin >> username;
+		cout << "\n\t\t\t\t|    PASSWORD:    ";
+		cin >> password;
+		ifstream input("SignInRecordsstudent.txt");
+		while (input >> userID >> userPASS) {
+			if (userID == username && userPASS == password) {
+				count = 1;
+				cout << "Success>>>>>\n\n";
+			}
+		}if (count == 1) {
+			Club d;
+			//Attendance s1;
+			do {
+				student s;
+				Course b;
+				Assignment l;
+				cout << " Select one of the following :\n";
+				cout << "<\t1.Enroll." << endl;
+				cout << "<\t2.Display student  enrollment  data.\n<\t3.Submit Assignment and see assignment info.  \n<\t4.JOIN Studnet Club\n<\t5.display student Course data\n<\t6.ADD C0URSE\n<\t7.organize event.";
+				int sel; cin >> sel;
+				if (sel == 1) {
+					s.enroll_student();
+					
+				}
+				else if (sel == 2) {
+					s.display_student_content();
+					
+				}
+				else if (sel == 3) {
+					s.submitAssignment();
+					
+				}
+				else if (sel == 4) {
+					s.join_club();
+				}
+				else if (sel == 5) {
+					b.show_course();
+				}
+				else if (sel == 6) {
+					Course c;
+					c.add_student_course();
+					cout << "\n++++++++++++++++++++++++++++++++++++++++++++++\n";
+					l.showFileContent_Assignment();
+
+				}
+				else if (sel == 7) {
+					d.organize_event();
+					cout << "\n------------------------------------------------------------------\n";
+				}
+			    else {
+				cout << "Incorrect credentials\n";
+			    }
+			} while (count == 1);
+
+
+		}
+	}
+
+	void teacherlogin() {//*******************************************admin login signup
+		Course c;
+		Attendance a;
+		int count = 0, login = 0;
+		string username, password, userID, userPASS;
+		cout << "\n\n\n\nqq\t\t\t\t|    USERNAME:     ";
+		cin >> username;
+		cout << "\n\t\t\t\t|    PASSWORD:    ";
+		cin >> password;
+		ifstream input("SignInRecordsteacher.txt");
+		while (input >> userID >> userPASS) {
+			if (userID == username && userPASS == password) {
+				count = 1;
+			}
+			if (count == 1) {
+				do {
+					student s;
+					cout << " Select one of the following :\n";
+					cout << "1.Enter grades." << endl;
+					cout << "2.Enter ATTENDANCE.\n3.Add  Assignment \n4.Display ATTENDANCE\n5.Display GRADES\n";
+					int sel; cin >> sel;
+					if (sel == 1) {
+
+					}
+					else if (sel == 2) {
+						a.markAttendance();
+					}
+					else if (sel == 3) {
+						c.addAssignment();
+					}
+					else if (sel == 4) {
+						a.displayAttendance();
+					}
+					else if (sel == 5) {
+						//	c.display_grades();}
+
+					}
+
+					else {
+						cout << "INCORRECT CREDENTIALS !!\n";
+					}
+				}while(count ==1);
+			}
+		}
+	}
+	void adminsignup() {   //the admin functions are accesible by this function'
+		string Ruser, Rpass, RuserID, RuserPASS;
+		cout << "|    Username:     ";
+		cin >> Ruser;
+		cout << "|    Password:     ";
+		cin >> Rpass;
+		ofstream output("SignInRecordsadmin.txt", ios::app);
+		output << Ruser << " " << Rpass << endl;
+		output.close();
+		cout << "\n\tRegistration successful\n.";
+	}
+	void studentignup() {   //the admin functions are accesible by this function'
+		string Ruser, Rpass, RuserID, RuserPASS;
+		cout << "|    Username:     ";
+		cin >> Ruser;
+		cout << "|    Password:     ";
+		cin >> Rpass;
+		ofstream output("SignInRecordsstudent.txt", ios::app);
+		output << Ruser << " " << Rpass << endl;
+		output.close();
+		cout << "\n\tRegistration successful\n.";
+	}
+	void teacherignup() {   //the admin functions are accesible by this function'
+		string Ruser, Rpass, RuserID, RuserPASS;
+		cout << "|    Username:     ";
+		cin >> Ruser;
+		cout << "|    Password:     ";
+		cin >> Rpass;
+		ofstream output("SignInRecordsteacher.txt", ios::app);
+		output << Ruser << " " << Rpass << endl;
+		output.close();
+		cout << "\n\tRegistration successful\n.";
+	}
+	//////////////////////////////////////////////////////////////////////////////
+	int main() {
+
+		cout << "\t\t\t------------------------------------------------------------------------\n";
+		cout << "\t\t\t                                MENU                                    \n";
+		cout << "\t\t\t------------------------------------------------------------------------\n";
+		cout << "\t\t\t             Select the following:  \n ";
+		cout << "|\t\t\t  1. Admin\n";
+		cout << "|\t\t\t  2. Student   | \n ";
+		cout << "|\t\t\t  3. Teacher   |  ";
+		cout << "\n\t<\t\t\t";
+		int selec = 0;
+		cin >> selec;
+		if (selec == 1) {
+			cout << "\n\n\t\t\tChoose one of the following:\n";
+			cout << "\n\n\t\t\t1. Sign in\n";
+			cout << "\n\n\t\t\t2. Sign up   |  ";
+			int c;
+			cin >> c;
+			if (c == 1) {
+				adminlogin();
+
+			}
+			else if (c == 2) {
+
+				adminsignup();
+			}
+			else {
+				cout << "Choose the right option.";
+			}
+		}
+		else if (selec == 2) {
+			cout << "\n\n\t\t\tChoose one of the following:\n";
+			cout << "\n\n\t\t\t1. Sign in\n";
+			cout << "\n\n\t\t\t2. Sign up   |  ";
+			int c;
+			cin >> c;
+			if (c == 1) {
+				studentlogin();
+			}
+			else if (c == 2) {
+				studentignup();
+			}
+
+			else {
+				cout << "Choose the right option.";
+			}
+		}
+		else if (selec == 3) {
+			cout << "\n\n\t\t\tChoose one of the following:\n";
+			cout << "\n\n\t\t\t1. Sign in\n";
+			cout << "\n\n\t\t\t2. Sign up   |  ";
+			int c;
+			cin >> c;
+			if (c == 1) {
+				teacherlogin();
+			}
+			if (c == 2) {
+				teacherignup();
+			}
+			else {
+				cout << "Choose the right option.";
+			}
+		}
+	}
+
+
+
+
